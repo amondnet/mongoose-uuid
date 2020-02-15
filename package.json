@@ -1,5 +1,5 @@
 {
-  "name": "mongoose-uuid3",
+  "name": "@amondnet/mongoose-uuid",
   "version": "3.0.0",
   "description": "UUID schema type for mongoose",
   "main": "index.js",
@@ -10,7 +10,7 @@
   "author": "Minsu Lee",
   "repository": {
     "type": "git",
-    "url": "https://github.com/niahmiah/mongoose-uuid.git"
+    "url": "https://github.com/amondnet/mongoose-uuid.git"
   },
   "license": "ISC",
   "dependencies": {
@@ -39,5 +39,6 @@
   },
   "engines": {
     "node": ">=10"
-  }
+  },
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
 }

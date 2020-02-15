@@ -7,7 +7,7 @@
     "test": "mocha",
     "coverage": "istanbul cover _mocha"
   },
-  "author": "Ian Patton <ian.patton@gmail.com> (http://github.com/niahmiah)",
+  "author": "Minsu Lee",
   "repository": {
     "type": "git",
     "url": "https://github.com/niahmiah/mongoose-uuid.git"
@@ -34,9 +34,10 @@
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
     "request": "^2.88.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "mongoose": "^5.8.0"
   },
   "engines": {
-    "node": ">=6.4.0"
+    "node": ">=10"
   }
 }

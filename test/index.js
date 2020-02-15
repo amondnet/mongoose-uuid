@@ -20,7 +20,7 @@ var Product = mongoose.model('Product', ProductSchema);
 
 describe('mongoose-uuid', function() {
   before(function() {
-    return mongoose.connect('mongodb://localhost:27017/mongoose-uuid-test', { useNewUrlParser: true })
+    return mongoose.connect('mongodb://localhost:27017/mongoose-uuid-test', { useNewUrlParser: true,useUnifiedTopology: true })
   })
 
   after(function(cb) {

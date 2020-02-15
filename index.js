@@ -48,7 +48,12 @@ SchemaUUID.prototype.checkRequired = function(value) {
 };
 
 SchemaUUID.prototype.cast = function(value, doc, init) {
-  if (value instanceof mongoose.Types.Buffer.Binary) return value;
+  if (value instanceof mongoose.Types.Buffer.Binary) {
+    if (init && doc instanceof mongoose.Types.Embedded) {
+      return getter(value);
+    }
+    return value;
+  }
 
   if (typeof value === 'string') {
     var uuidBuffer = new mongoose.Types.Buffer(uuidParse.parse(value));

@@ -1,4 +1,4 @@
-var uuidv4 = require('uuid/v4');
+var {v4: uuidv4} = require('uuid');
 var mongoose = require('mongoose');
 var bson = require('bson');
 var should = require('chai').should();
@@ -9,74 +9,71 @@ require('../index').loadType(mongoose);
 var UUID = mongoose.Types.UUID;
 
 var ProductSchema = Schema({
-  _id: { type: UUID, default: uuidv4 },
-  name: String
-}, { id: false });
+  _id: {type: UUID, default: uuidv4}, name: String
+}, {id: false});
 
 ProductSchema.set('toObject', {getters: true});
 ProductSchema.set('toJSON', {getters: true});
 
 var Product = mongoose.model('Product', ProductSchema);
 
-describe('mongoose-uuid', function() {
-  before(function() {
-    return mongoose.connect('mongodb://localhost:27017/mongoose-uuid-test', { useNewUrlParser: true,useUnifiedTopology: true })
+describe('mongoose-uuid', function () {
+  before(function () {
+    return mongoose.connect('mongodb://localhost:27017/mongoose-uuid-test', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    })
   })
 
-  after(function(cb) {
-    Product.deleteMany({}, function() {
+  after(function (cb) {
+    Product.deleteMany({}, function () {
       mongoose.disconnect(cb);
     });
   });
 
-  it('should cast uuid strings to binary', function() {
+  it('should cast uuid strings to binary', function () {
     var product = new Product({
-      _id: '7c401d91-3852-4818-985d-7e7b79f771c3',
-      name: 'Some product'
+      _id: '7c401d91-3852-4818-985d-7e7b79f771c3', name: 'Some product'
     });
 
     (product._doc._id instanceof mongoose.Types.Buffer.Binary).should.equal(true);
   });
 
-  it('should cast null to null', function() {
+  it('should cast null to null', function () {
     var product = new Product({
-      _id: null,
-      name: 'Some product'
+      _id: null, name: 'Some product'
     });
 
     (product._doc._id == null).should.equal(true);
   });
 
-  it('should not throw when given anything other than a Buffer or String', function() {
+  it('should not throw when given anything other than a Buffer or String', function () {
     var product = new Product({
-      _id: 300,
-      name: 'Some product'
+      _id: 300, name: 'Some product'
     });
 
     (product._doc._id == null).should.equal(false);
   });
 
-  it('should convert back to text with toObject()', function() {
+  it('should convert back to text with toObject()', function () {
     var product = new Product({
-      _id: '7c401d91-3852-4818-985d-7e7b79f771c3',
-      name: 'Some product'
+      _id: '7c401d91-3852-4818-985d-7e7b79f771c3', name: 'Some product'
     });
     var productObject = product.toObject();
 
     (productObject._id).should.equal('7c401d91-3852-4818-985d-7e7b79f771c3');
   });
 
-  it('should save without errors', function(cb) {
+  it('should save without errors', function (cb) {
     var product = new Product({
-      _id: '7c401d91-3852-4818-985d-7e7b79f771c3',
-      name: 'Some product'
+      _id: '7c401d91-3852-4818-985d-7e7b79f771c3', name: 'Some product'
     });
 
     product.save(cb);
   });
 
-  it('should be found correctly with .find()', function(cb) {
-    Product.findOne({_id: '7c401d91-3852-4818-985d-7e7b79f771c3'}, function(err, product) {
+  it('should be found correctly with .find()', function (cb) {
+    Product.findOne({_id: '7c401d91-3852-4818-985d-7e7b79f771c3'}, function (err, product) {
       (product).should.not.be.null;
 
       var productObject = product.toObject();
@@ -87,8 +84,8 @@ describe('mongoose-uuid', function() {
     });
   });
 
-  it('should be found correctly with .findById()', function(cb) {
-    Product.findById('7c401d91-3852-4818-985d-7e7b79f771c3', function(err, product) {
+  it('should be found correctly with .findById()', function (cb) {
+    Product.findById('7c401d91-3852-4818-985d-7e7b79f771c3', function (err, product) {
       (product).should.not.be.null;
 
       var productObject = product.toObject();
@@ -99,11 +96,10 @@ describe('mongoose-uuid', function() {
     });
   });
 
-  describe('query population', function() {
+  describe('query population', function () {
     var PetSchema = Schema({
-      _id: { type: UUID, default: uuidv4 },
-      name: String,
-    }, { id: false });
+      _id: {type: UUID, default: uuidv4}, name: String,
+    }, {id: false});
 
     PetSchema.set('toObject', {getters: true});
     PetSchema.set('toJSON', {getters: true});
@@ -111,40 +107,38 @@ describe('mongoose-uuid', function() {
     var Pet = mongoose.model('Pet', PetSchema);
 
     var PhotoSchema = Schema({
-      _id: { type: UUID, default: uuidv4 },
+      _id: {type: UUID, default: uuidv4},
       filename: String,
-      pet: { type: UUID, ref: 'Pet', required: true }
-    }, { id: false });
+      pet: {type: UUID, ref: 'Pet', required: true}
+    }, {id: false});
 
     PhotoSchema.set('toObject', {getters: true});
     PhotoSchema.set('toJSON', {getters: true});
 
     var Photo = mongoose.model('Photo', PhotoSchema);
 
-    before(function(cb) {
+    before(function (cb) {
       var pet = new Pet({
         name: 'Sammy'
       });
 
       var photo = new Photo({
-        _id: '7c401d91-3852-4818-985d-7e7b79f771c2',
-        filename: 'photo.jpg',
-        pet: pet._id
+        _id: '7c401d91-3852-4818-985d-7e7b79f771c2', filename: 'photo.jpg', pet: pet._id
       });
 
-      pet.save(function() {
+      pet.save(function () {
         photo.save(cb);
       })
     })
 
-    after(function(cb) {
-      Pet.deleteMany(function() {
+    after(function (cb) {
+      Pet.deleteMany(function () {
         Photo.deleteMany({}, cb);
       })
     });
 
-    it('should work', function(cb) {
-      Photo.findById('7c401d91-3852-4818-985d-7e7b79f771c2').populate('pet').exec(function(err, photo) {
+    it('should work', function (cb) {
+      Photo.findById('7c401d91-3852-4818-985d-7e7b79f771c2').populate('pet').exec(function (err, photo) {
         (photo.pet).should.exist;
         (photo.pet.name).should.equal('Sammy');
 
@@ -153,22 +147,20 @@ describe('mongoose-uuid', function() {
     });
   });
 
-  describe('other scenarios', function() {
+  describe('other scenarios', function () {
     var BoatSchema = Schema({
-      _id: { type: UUID, default: uuidv4 },
-      dingy: { type: UUID, ref: 'Boat' },
-      name: String,
-    }, { id: false });
+      _id: {type: UUID, default: uuidv4}, dingy: {type: UUID, ref: 'Boat'}, name: String,
+    }, {id: false});
 
     BoatSchema.set('toJSON', {getters: true});
 
     var Boat = mongoose.model('Boat', BoatSchema);
 
-    afterEach(function(cb) {
+    afterEach(function (cb) {
       Boat.deleteMany({}, cb);
     });
 
-    it('should get with no value', function() {
+    it('should get with no value', function () {
       var boat = new Boat({
         name: 'Sunshine'
       });
@@ -176,7 +168,7 @@ describe('mongoose-uuid', function() {
       (undefined === boat.dingy).should.be.true;
     });
 
-    it('setting a populated field to uuid string', function(cb) {
+    it('setting a populated field to uuid string', function (cb) {
       var ripples = new Boat({
         name: 'Ripples'
       });
@@ -184,19 +176,18 @@ describe('mongoose-uuid', function() {
         name: 'Splash'
       });
       var sunshine = new Boat({
-        name: 'Sunshine',
-        dingy: ripples._id
+        name: 'Sunshine', dingy: ripples._id
       });
 
-      splash.save(function() {
-        ripples.save(function() {
-          sunshine.save(function() {
-            Boat.findOne({name: 'Sunshine'}).populate('dingy').exec(function(err, boat) {
+      splash.save(function () {
+        ripples.save(function () {
+          sunshine.save(function () {
+            Boat.findOne({name: 'Sunshine'}).populate('dingy').exec(function (err, boat) {
               (boat.dingy._id).should.equal(ripples._id);
 
               boat.dingy = splash._id;
-              boat.save(function() {
-                Boat.findOne({name: 'Sunshine'}).populate('dingy').exec(function(err, boat2) {
+              boat.save(function () {
+                Boat.findOne({name: 'Sunshine'}).populate('dingy').exec(function (err, boat2) {
                   (boat2.dingy._id).should.equal(splash._id);
 
                   cb();

@@ -1,9 +1,8 @@
 # Mongoose UUID Data type
-========================
 
-[![NPM Package](https://img.shields.io/npm/v/mongoose-uuid3.svg?style=flat-square)](https://www.npmjs.org/package/mongoose-uuid3)
+[![NPM Package](https://img.shields.io/npm/v/mongoose-binary-uuid.svg?style=flat-square)](https://www.npmjs.org/package/mongoose-binary-uuid)
 [![Build Status](https://img.shields.io/travis/amondnet/mongoose-uuid.svg?branch=master&style=flat-square)](https://travis-ci.org/amondnet/mongoose-uuid)
-[![Coverage Status](https://img.shields.io/coveralls/amondnet/mongoose-uuid.svg?branch=master&style=flat-square)](https://coveralls.io/github/niahmiah/mongoose-uuid)
+[![Coverage Status](https://img.shields.io/coveralls/amondnet/mongoose-uuid.svg?branch=master&style=flat-square)](https://coveralls.io/github/amondnet/mongoose-uuid)
 
 ## Why
 MongoDB supports storing UUID v1 and v4 in Binary format. Why not take advantage of that when using UUIDs?

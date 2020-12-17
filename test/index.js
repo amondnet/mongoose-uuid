@@ -5,7 +5,7 @@ var should = require('chai').should();
 var Schema = mongoose.Schema;
 
 // adds the UUID type to the Mongoose Schema types
-require('../index')(mongoose);
+require('../index').loadType(mongoose);
 var UUID = mongoose.Types.UUID;
 
 var ProductSchema = Schema({

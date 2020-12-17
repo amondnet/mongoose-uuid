@@ -12,7 +12,7 @@ function getter(binary) {
   if (!(binary instanceof mongoose.Types.Buffer.Binary)) return binary;
 
   var len = binary.length();
-  var b = binary.read(0,len);
+  var b = binary.read(0, len);
   var buf = new Buffer(len);
   var hex = '';
 
@@ -23,14 +23,22 @@ function getter(binary) {
   for (var i = 0; i < len; i++) {
     var n = buf.readUInt8(i);
 
-    if (n < 16){
+    if (n < 16) {
       hex += '0' + n.toString(16);
     } else {
       hex += n.toString(16);
     }
   }
 
-  return hex.substr(0, 8) + '-' + hex.substr(8, 4) + '-' + hex.substr(12, 4) + '-' + hex.substr(16, 4) + '-' + hex.substr(20, 12);
+  return hex.substr(0, 8)
+      + '-'
+      + hex.substr(8, 4)
+      + '-'
+      + hex.substr(12, 4)
+      + '-'
+      + hex.substr(16, 4)
+      + '-'
+      + hex.substr(20, 12);
 }
 
 function SchemaUUID(path, options) {
@@ -43,11 +51,11 @@ util.inherits(SchemaUUID, mongoose.SchemaTypes.Buffer);
 
 SchemaUUID.schemaName = 'UUID';
 
-SchemaUUID.prototype.checkRequired = function(value) {
+SchemaUUID.prototype.checkRequired = function (value) {
   return value instanceof mongoose.Types.Buffer.Binary;
 };
 
-SchemaUUID.prototype.cast = function(value, doc, init) {
+SchemaUUID.prototype.cast = function (value, doc, init) {
   if (value instanceof mongoose.Types.Buffer.Binary) {
     if (init && doc instanceof mongoose.Types.Embedded) {
       return getter(value);
@@ -66,7 +74,7 @@ SchemaUUID.prototype.cast = function(value, doc, init) {
   throw new Error('Could not cast ' + value + ' to UUID.');
 };
 
-SchemaUUID.prototype.castForQuery = function($conditional, val) {
+SchemaUUID.prototype.castForQuery = function ($conditional, val) {
   var handler;
 
   if (arguments.length === 2) {
@@ -82,18 +90,18 @@ SchemaUUID.prototype.castForQuery = function($conditional, val) {
   return this.cast($conditional);
 };
 
-module.exports.loadType = function(mongoose) {
-  	if (mongoose.Schema && typeof mongoose.Schema.Types === 'object') {
-		mongoose.Schema.Types.UUID = SchemaUUID;
-	}
+module.exports.loadType = function (mongoose) {
+  if (mongoose.Schema && typeof mongoose.Schema.Types === 'object') {
+    mongoose.Schema.Types.UUID = SchemaUUID;
+  }
 
-	if (typeof mongoose.SchemaTypes === 'object') {
-		mongoose.SchemaTypes.UUID = SchemaUUID;
-	}
+  if (typeof mongoose.SchemaTypes === 'object') {
+    mongoose.SchemaTypes.UUID = SchemaUUID;
+  }
 
-	if (typeof mongoose.Types === 'object') {
-		mongoose.Types.UUID = SchemaUUID;
-	}
+  if (typeof mongoose.Types === 'object') {
+    mongoose.Types.UUID = SchemaUUID;
+  }
   return SchemaUUID;
 }
 

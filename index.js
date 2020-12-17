@@ -82,8 +82,19 @@ SchemaUUID.prototype.castForQuery = function($conditional, val) {
   return this.cast($conditional);
 };
 
-module.exports = function(mongoose) {
-  mongoose.Types.UUID = mongoose.SchemaTypes.UUID = SchemaUUID;
+module.exports.loadType = function(mongoose) {
+  	if (mongoose.Schema && typeof mongoose.Schema.Types === 'object') {
+		mongoose.Schema.Types.UUID = SchemaUUID;
+	}
+
+	if (typeof mongoose.SchemaTypes === 'object') {
+		mongoose.SchemaTypes.UUID = SchemaUUID;
+	}
+
+	if (typeof mongoose.Types === 'object') {
+		mongoose.Types.UUID = SchemaUUID;
+	}
+  return SchemaUUID;
 }
 
 module.exports.UUID = SchemaUUID
